@@ -1,2 +1,7 @@
 # automaticOperation
 在线教育平台自动答题
+
+首先登陆平台,F12打开控制台然后刷新界面找到main.jsp在headers中找到cookie复制
+Cookie:后面的到登陆界面然后登陆
+
+在使用时一定要先点击获取答案在进行自动答题

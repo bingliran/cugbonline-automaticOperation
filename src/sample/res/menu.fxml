@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="330.0"
+      prefWidth="430.0" xmlns="http://javafx.com/javafx/11.0.1"
+      fx:controller="sample.controller.MenuController">
+    <Button layoutX="141.0" layoutY="173.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#operatingSystemPrinciple" text="操作系统原理"/>
+    <Button layoutX="141.0" layoutY="134.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#microcomputerInterfaceTechnology" text="微机接口技术"/>
+    <Button layoutX="141.0" layoutY="97.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#javaLanguageProgramming" text="Java语言程序设计"/>
+    <Button layoutX="141.0" layoutY="58.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#principlesOfDatabaseSystem" text="数据库系统原理"/>
+    <fx:include source="navigation.fxml"/>
+</Pane>
