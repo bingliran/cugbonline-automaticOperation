@@ -17,10 +17,7 @@ import sample.util.HttpUtil;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CourseItemController {
     @FXML
@@ -53,7 +50,7 @@ public class CourseItemController {
                     });
                     return;
                 }
-                Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(Constant.VIEW_RES_URL + testId, null, null)));
+                Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(Constant.VIEW_RES_URL + viewId, null, null)));
                 Elements elements = document.getElementsByClass("Fimg");
                 List<String> list = new ArrayList<>();
                 for (Element element : elements) {
@@ -115,7 +112,7 @@ public class CourseItemController {
                     if (StringUtils.isNotBlank(tId) && tId.contains("jumpto")) {
                         int topic = Integer.parseInt(tId.substring("jumpto)".length(), tId.length() - 1));
                         String answer = answerList.get(index++).trim();
-                        Map<String, String> requestData = new HashMap<>();
+                        Map<String, Object> requestData = new HashMap<>();
                         requestData.put("currentSubmitQuestionid", String.valueOf(topic));
                         requestData.put("actionType", "saveAnswer");
                         requestData.put("testId", testId);
@@ -133,6 +130,7 @@ public class CourseItemController {
                             queSubmit(body, index, header, requestData);
                             continue;
                         }
+                        LinkedList<String> multipleChoiceList = new LinkedList<>();
                         for (int i = 0; i < elementsQue.size(); i++) {
                             body.appendText(elementsQue.get(i).text().trim() + "::" + answer + ",");
                             requestData.put("actionType", "saveAnswer");
@@ -150,9 +148,17 @@ public class CourseItemController {
                                 requestData.put("answer", String.valueOf(topic + i + 1));
                                 queSubmit(body, index, header, requestData);
                                 break;
-                            } else if (i == elementsQue.size() - 1) {
-                                body.appendText("\n没有查找到正确结果");
-                                requestData.put("answer", String.valueOf(topic + 1));
+                            } else if (answer.trim().contains(elementsQue.get(i).text().trim())) {
+                                multipleChoiceList.addLast(String.valueOf(topic + i + 1));
+                            }
+                            if (i == elementsQue.size() - 1) {
+                                if (multipleChoiceList.isEmpty()) {
+                                    body.appendText("\n没有查找到正确结果");
+                                    requestData.put("answer", String.valueOf(topic + 1));
+                                    queSubmit(body, index, header, requestData);
+                                    break;
+                                }
+                                requestData.put("answer", multipleChoiceList);
                                 queSubmit(body, index, header, requestData);
                                 break;
                             }
@@ -168,7 +174,7 @@ public class CourseItemController {
 
     }
 
-    private void queSubmit(TextArea body, int index, Map<String, String> header, Map<String, String> requestData) throws InterruptedException, IOException {
+    private void queSubmit(TextArea body, int index, Map<String, String> header, Map<String, ?> requestData) throws InterruptedException, IOException {
         //防止请求频繁
         Thread.sleep(2000);
         String res = EntityUtils.toString(HttpUtil.doPost(Constant.QUESTION_URL + testId, header, requestData));

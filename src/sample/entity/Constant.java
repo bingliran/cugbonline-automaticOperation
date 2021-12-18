@@ -20,7 +20,7 @@ public class Constant {
     /**
      * 获取考试结果url
      */
-    public static final String VIEW_RES_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/stu_qtest_result.jsp?testId=";
+    public static final String VIEW_RES_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/";
     /**
      * 获取考试结果主界面url
      */

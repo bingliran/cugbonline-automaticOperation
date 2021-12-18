@@ -8,13 +8,17 @@
       prefHeight="330.0"
       prefWidth="430.0" xmlns="http://javafx.com/javafx/11.0.1"
       fx:controller="sample.controller.MenuController">
-    <Button layoutX="141.0" layoutY="173.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
-            onAction="#operatingSystemPrinciple" text="操作系统原理"/>
-    <Button layoutX="141.0" layoutY="134.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
-            onAction="#microcomputerInterfaceTechnology" text="微机接口技术"/>
-    <Button layoutX="141.0" layoutY="97.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
-            onAction="#javaLanguageProgramming" text="Java语言程序设计"/>
-    <Button layoutX="141.0" layoutY="58.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
-            onAction="#principlesOfDatabaseSystem" text="数据库系统原理"/>
+    <Button layoutX="141.0" layoutY="222.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#mechanicalPrinciple" text="机械原理"/>
+    <Button layoutX="141.0" layoutY="183.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#operatingSystemPrinciple" text="大学英语（3）"/>
+    <Button layoutX="141.0" layoutY="144.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#microcomputerInterfaceTechnology" text="线性代数"/>
+    <Button layoutX="141.0" layoutY="107.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#javaLanguageProgramming" text="马克思主义基本原理"/>
+    <Button layoutX="141.0" layoutY="68.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#principlesOfDatabaseSystem" text="现代远程教育"/>
+    <Button layoutX="141.0" layoutY="30.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="149.0"
+            onAction="#objectOrientedProgramming" text="面向对象程序设计"/>
     <fx:include source="navigation.fxml"/>
 </Pane>

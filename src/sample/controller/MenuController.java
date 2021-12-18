@@ -19,31 +19,45 @@ import static sample.entity.Constant.COURSE_LIST_URL;
 public class MenuController extends BaseController {
 
     /**
-     * 操作系统原理
+     * 机械原理
+     */
+    public void mechanicalPrinciple() throws IOException {
+        getCourseList("12318", "机械原理");
+    }
+
+    /**
+     * 大学英语（3）
      */
     public void operatingSystemPrinciple() throws IOException {
-        getCourseList("10094", "操作系统原理");
+        getCourseList("10566", "大学英语（3）");
     }
 
     /**
-     * 微机接口技术
+     * 线性代数
      */
     public void microcomputerInterfaceTechnology() throws IOException {
-        getCourseList("11567", "微机接口技术");
+        getCourseList("11242", "线性代数");
     }
 
     /**
-     * Java语言程序设计
+     * 马克思主义基本原理
      */
     public void javaLanguageProgramming() throws IOException {
-        getCourseList("11571", "Java语言程序设计");
+        getCourseList("10712", "马克思主义基本原理");
     }
 
     /**
-     * 数据库系统原理
+     * 现代远程教育
      */
     public void principlesOfDatabaseSystem() throws IOException {
-        getCourseList("11608", "数据库系统原理");
+        getCourseList("10728", "现代远程教育");
+    }
+
+    /**
+     * 面向对象程序设计
+     */
+    public void objectOrientedProgramming() throws IOException {
+        getCourseList("11438", "面向对象程序设计");
     }
 
     private void getCourseList(String columnId, String title) throws IOException {

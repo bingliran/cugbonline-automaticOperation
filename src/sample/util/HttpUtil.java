@@ -66,11 +66,17 @@ public class HttpUtil {
      * 仅适用于application/json请求
      * Object requestData 为请求体 会转为json结构数据
      */
-    public static HttpEntity doPost(String url, Map<String, String> header, Map<String, String> requestData) throws IOException {
+    public static HttpEntity doPost(String url, Map<String, String> header, Map<String, ?> requestData) throws IOException {
         HttpPost post = new HttpPost(url);
         setHeader(post, header);
         List<NameValuePair> params = new ArrayList<>();
-        requestData.forEach((o1, o2) -> params.add(new BasicNameValuePair(o1, o2)));
+        requestData.forEach((o1, o2) -> {
+            if (o2 instanceof List) {
+                ((List<?>) o2).forEach(s -> params.add(new BasicNameValuePair(o1, String.valueOf(s))));
+            } else {
+                params.add(new BasicNameValuePair(o1, String.valueOf(o2)));
+            }
+        });
         HttpEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
         post.setEntity(entity);
         return execute(post).getEntity();
