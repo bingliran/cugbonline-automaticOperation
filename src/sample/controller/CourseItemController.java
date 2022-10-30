@@ -16,8 +16,8 @@ import sample.util.AlertUtil;
 import sample.util.HttpUtil;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CourseItemController {
     @FXML
@@ -50,17 +50,15 @@ public class CourseItemController {
                     });
                     return;
                 }
-                Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(Constant.VIEW_RES_URL + viewId, null, null)));
-                Elements elements = document.getElementsByClass("Fimg");
+                Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(Constant.VIEW_RES_URL + "testId=" + testId + "&answerId=" + viewId, null, null)));
+                Elements elements = document.getElementsByClass("test_checkq_question_qBody");
                 List<String> list = new ArrayList<>();
                 for (Element element : elements) {
-                    String text = element.text();
-                    if (text.contains("[试题解析]")) continue;
-                    String s = text.replace("[参考答案]", "");
-                    if (StringUtils.isBlank(s)) {
-                        s = element.getElementsByTag("input").val();
+                    String text = getMultipleChoice(element);
+                    if (text == null) {
+                        text = getTrueOrFalse(element);
                     }
-                    list.add(s);
+                    list.add(text);
                 }
                 answerList = list;
                 StringBuilder stringBuilder = new StringBuilder();
@@ -79,6 +77,41 @@ public class CourseItemController {
         t.start();
     }
 
+    private String getMultipleChoice(Element element) {
+        if (element.getElementsByClass("itemWrapper").isEmpty()) {
+            return null;
+        }
+        Element itemWrapper = element.getElementsByClass("itemWrapper").get(0);
+        Elements div = itemWrapper.getElementsByTag("div");
+        StringJoiner stringJoiner = new StringJoiner(";");
+        for (Element anDiv : div) {
+            Elements span = anDiv.getElementsByTag("span");
+            if (span.size() == 2) {
+                stringJoiner.add(span.get(0).html().trim());
+            }
+        }
+        return stringJoiner.length() == 0 ? null : stringJoiner.toString();
+    }
+
+    private String getTrueOrFalse(Element element) {
+        if (element.getElementsByClass("rightAnswer_body").isEmpty()) {
+            return null;
+        }
+        Element rightAnswer_body = element.getElementsByClass("rightAnswer_body").get(0);
+        if (rightAnswer_body.getElementsByTag("p").isEmpty()) {
+            String b = rightAnswer_body.html().trim();
+            if ("T".equals(b)) {
+                return "正确";
+            }
+            if ("F".equals(b)) {
+                return "错误";
+            }
+            return b;
+        }
+        String[] pbr = rightAnswer_body.getElementsByTag("p").get(0).html().split("<br>");
+        return Arrays.stream(pbr).collect(Collectors.joining("</p><p>", "<p>", "</p>"));
+    }
+
     public void automaticAnswer() {
         AlertController alertController = AlertUtil.getAlert(title.getText(), "正在准备开始考试");
         if (answerList == null || answerList.isEmpty()) {
@@ -95,7 +128,7 @@ public class CourseItemController {
         new Thread(() -> {
             try {
                 TextArea body = alertController.getBody();
-                HttpUtil.doGet(Constant.TEST_MAIN_URL + testId, null, null);
+                HttpUtil.doGet(Constant.TEST_PRE_MAIN_URL + testId, null, null);
                 Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(Constant.TEST_MAIN_URL + testId, null, null)));
                 Elements elements = document.getElementsByClass("left");
                 if (elements.size() > 5)
@@ -126,8 +159,8 @@ public class CourseItemController {
                         body.appendText("\n获取第" + index + "道题目完成");
                         body.appendText("\n正在比对" + index + "道题目答案\n");
                         if (elementsQue == null || elementsQue.isEmpty()) {
-                            requestData.put("answer", URLEncoder.encode(answer, "utf-8"));
-                            queSubmit(body, index, header, requestData);
+                            requestData.put("answer", answer);
+                            queSubmit(body, index, header, requestData, "gb2312");
                             continue;
                         }
                         LinkedList<String> multipleChoiceList = new LinkedList<>();
@@ -175,9 +208,13 @@ public class CourseItemController {
     }
 
     private void queSubmit(TextArea body, int index, Map<String, String> header, Map<String, ?> requestData) throws InterruptedException, IOException {
+        queSubmit(body, index, header, requestData, "UTF-8");
+    }
+
+    private void queSubmit(TextArea body, int index, Map<String, String> header, Map<String, ?> requestData, String charset) throws InterruptedException, IOException {
         //防止请求频繁
         Thread.sleep(2000);
-        String res = EntityUtils.toString(HttpUtil.doPost(Constant.QUESTION_URL + testId, header, requestData));
+        String res = EntityUtils.toString(HttpUtil.doPost(Constant.QUESTION_URL + testId, header, requestData, charset));
         if (res.contains("保存答案")) {
             body.appendText("\n提交" + index + "道题目完成");
         } else {
@@ -206,8 +243,8 @@ public class CourseItemController {
                     }
                 }
             }
-            String viewId = elements.get(index).select("a[href]").attr("href");
-            if (StringUtils.isNotBlank(viewId)) this.viewId = viewId;
+            String viewId = elements.get(4).select("a[href]").attr("href");
+            if (StringUtils.isNotBlank(viewId)) this.viewId = viewId.split("&answerId=")[1];
         }
     }
 }

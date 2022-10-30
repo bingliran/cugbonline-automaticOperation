@@ -19,56 +19,64 @@ import static sample.entity.Constant.COURSE_LIST_URL;
 public class MenuController extends BaseController {
 
     /**
-     * 机械原理
+     * 机械设计
+     */
+    public void mechanicalDesign() throws IOException {
+        getCourseList("12404", "机械设计");
+    }
+
+    /**
+     * 测试技术
      */
     public void mechanicalPrinciple() throws IOException {
-        getCourseList("12318", "机械原理");
+        getCourseList("12399", "测试技术");
     }
 
     /**
-     * 大学英语（3）
+     * 互换性与测量技术
      */
     public void operatingSystemPrinciple() throws IOException {
-        getCourseList("10566", "大学英语（3）");
+        getCourseList("12403", "互换性与测量技术");
     }
 
     /**
-     * 线性代数
+     * 计算机组成原理
      */
     public void microcomputerInterfaceTechnology() throws IOException {
-        getCourseList("11242", "线性代数");
+        getCourseList("10103", "计算机组成原理");
     }
 
     /**
-     * 马克思主义基本原理
+     * windows程序设计
      */
     public void javaLanguageProgramming() throws IOException {
-        getCourseList("10712", "马克思主义基本原理");
+        getCourseList("10909", "windows程序设计");
     }
 
     /**
-     * 现代远程教育
+     * 计算机系统结构
      */
     public void principlesOfDatabaseSystem() throws IOException {
-        getCourseList("10728", "现代远程教育");
+        getCourseList("11460", "计算机系统结构");
     }
 
     /**
-     * 面向对象程序设计
+     * 计算机图形学
      */
     public void objectOrientedProgramming() throws IOException {
-        getCourseList("11438", "面向对象程序设计");
+        getCourseList("10438", "计算机图形学");
     }
 
     private void getCourseList(String columnId, String title) throws IOException {
         Document document = Jsoup.parse(EntityUtils.toString(HttpUtil.doGet(COURSE_LIST_URL + columnId, null, null)));
-        String className = "align_c classicLook";
+        String className = "classicLook";
         int index = 0;
         Elements elements;
         Deque<Course> deque = new LinkedList<>();
         int timeLength = "yyyy-MM-dd".length();
-        while ((elements = document.getElementsByClass(className + index++)) != null && index < 10) {
+        while ((elements = document.select("tr[class=" + className + index++ + "]")) != null && index < 10) {
             if (elements.isEmpty()) continue;
+            elements = elements.get(0).getElementsByTag("td");
             Course course = new Course();
             course.setTitle(elements.get(0).text());
             course.setStartTime(elements.get(1).text().substring(0, timeLength));

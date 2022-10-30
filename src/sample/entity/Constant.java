@@ -14,13 +14,17 @@ public class Constant {
      */
     public static final String SUBMIT_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/stu_qtest_submit.jsp?testId=";
     /**
+     * 获取试卷前执行url
+     */
+    public static final String TEST_PRE_MAIN_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/stu_qtest_pre.jsp?testId=";
+    /**
      * 获取试卷url
      */
     public static final String TEST_MAIN_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/stu_qtest_main.jsp?testId=";
     /**
      * 获取考试结果url
      */
-    public static final String VIEW_RES_URL = "http://jiaoxue.cugbonline.cn/meol/common/question/test/student/";
+    public static final String VIEW_RES_URL = "http://jiaoxue.cugbonline.cn/meol/test/stuQtestResult.do?";
     /**
      * 获取考试结果主界面url
      */

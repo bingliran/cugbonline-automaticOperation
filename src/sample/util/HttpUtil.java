@@ -67,6 +67,14 @@ public class HttpUtil {
      * Object requestData 为请求体 会转为json结构数据
      */
     public static HttpEntity doPost(String url, Map<String, String> header, Map<String, ?> requestData) throws IOException {
+        return doPost(url, header, requestData, "UTF-8");
+    }
+
+    /**
+     * 仅适用于application/json请求
+     * Object requestData 为请求体 会转为json结构数据
+     */
+    public static HttpEntity doPost(String url, Map<String, String> header, Map<String, ?> requestData, String charset) throws IOException {
         HttpPost post = new HttpPost(url);
         setHeader(post, header);
         List<NameValuePair> params = new ArrayList<>();
@@ -77,7 +85,7 @@ public class HttpUtil {
                 params.add(new BasicNameValuePair(o1, String.valueOf(o2)));
             }
         });
-        HttpEntity entity = new UrlEncodedFormEntity(params, "UTF-8");
+        HttpEntity entity = new UrlEncodedFormEntity(params, charset);
         post.setEntity(entity);
         return execute(post).getEntity();
     }
